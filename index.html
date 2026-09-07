@@ -1,0 +1,2528 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>COIKEMFC</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    -webkit-tap-highlight-color:transparent;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#07101c;
+    color:white;
+    overflow:hidden;
+}
+
+button{
+    border:0;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* ================= LOGIN ================= */
+
+#login{
+    position:fixed;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:
+        radial-gradient(circle at 50% 30%,#174a6e 0,#07101c 55%,#02050a 100%);
+    z-index:100;
+}
+
+.loginBox{
+    width:min(430px,90vw);
+    padding:30px;
+    border-radius:25px;
+    text-align:center;
+    background:rgba(10,20,32,.94);
+    border:1px solid rgba(255,255,255,.15);
+    box-shadow:0 20px 70px #000;
+}
+
+.logo{
+    font-size:42px;
+    font-weight:900;
+    letter-spacing:3px;
+    margin-bottom:8px;
+}
+
+.sub{
+    color:#9eb0c2;
+    margin-bottom:28px;
+}
+
+.loginBtn{
+    width:100%;
+    padding:15px;
+    margin:8px 0;
+    border-radius:13px;
+    font-size:16px;
+}
+
+.google{background:#fff;color:#111}
+.apple{background:#000;border:1px solid #444}
+.guest{background:#1685ff}
+
+.note{
+    font-size:12px;
+    color:#718096;
+    margin-top:15px;
+}
+
+/* ================= GAME ================= */
+
+#game{
+    display:none;
+    width:100vw;
+    height:100vh;
+}
+
+.top{
+    height:60px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 14px;
+    background:#0b1725;
+    border-bottom:1px solid #223247;
+}
+
+.money{
+    display:flex;
+    gap:15px;
+    font-size:14px;
+}
+
+.layout{
+    height:calc(100vh - 60px);
+    display:flex;
+}
+
+.side{
+    width:105px;
+    background:#08121f;
+    border-right:1px solid #203044;
+    padding:8px 6px;
+    overflow-y:auto;
+}
+
+.side button{
+    width:100%;
+    padding:10px 4px;
+    margin-bottom:5px;
+    border-radius:9px;
+    background:#101e2d;
+    font-size:11px;
+}
+
+.side button.active{
+    background:#176cff;
+}
+
+.content{
+    flex:1;
+    overflow:auto;
+    padding:14px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+/* ================= LOBBY ================= */
+
+.hero{
+    min-height:calc(100vh - 95px);
+    border-radius:22px;
+    position:relative;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at 50% 45%,#236b85,#0a2737 40%,#07111d 75%);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.stadiumLight{
+    position:absolute;
+    width:500px;
+    height:500px;
+    border-radius:50%;
+    background:rgba(70,220,255,.12);
+    filter:blur(50px);
+}
+
+.player{
+    position:relative;
+    width:110px;
+    height:260px;
+    animation:breathe 2s infinite ease-in-out;
+    z-index:2;
+}
+
+@keyframes breathe{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-7px)}
+}
+
+.head{
+    width:55px;
+    height:55px;
+    background:#c98258;
+    border-radius:50%;
+    margin:auto;
+    position:relative;
+}
+
+.hair{
+    position:absolute;
+    top:-4px;
+    left:4px;
+    width:47px;
+    height:25px;
+    background:#161616;
+    border-radius:50% 50% 30% 30%;
+}
+
+.bodyPlayer{
+    width:82px;
+    height:100px;
+    margin:5px auto;
+    border-radius:16px;
+    background:linear-gradient(145deg,#087cff,#043b91);
+}
+
+.leg{
+    position:absolute;
+    bottom:0;
+    width:28px;
+    height:95px;
+    background:#172234;
+    border-radius:10px;
+}
+
+.leg.left{left:27px}
+.leg.right{right:27px}
+
+.boot{
+    position:absolute;
+    bottom:-5px;
+    width:36px;
+    height:15px;
+    background:#111;
+    border-radius:10px;
+}
+
+.boot.l{left:18px}
+.boot.r{right:18px}
+
+.captainName{
+    position:absolute;
+    bottom:25px;
+    background:rgba(0,0,0,.55);
+    padding:10px 18px;
+    border-radius:12px;
+}
+
+/* ================= CARDS ================= */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+    gap:12px;
+}
+
+.card{
+    padding:15px;
+    border-radius:16px;
+    background:linear-gradient(145deg,#17263a,#0c1725);
+    border:1px solid #30435a;
+}
+
+.card h3{
+    margin-bottom:8px;
+}
+
+.stat{
+    display:flex;
+    justify-content:space-between;
+    color:#a9bacb;
+    font-size:13px;
+    margin:4px 0;
+}
+
+.bigBtn{
+    padding:13px 20px;
+    border-radius:12px;
+    background:#1378ff;
+    margin:7px 4px;
+}
+
+.red{background:#e34d4d}
+.green{background:#18a96b}
+
+/* ================= SQUAD ================= */
+
+.pitch{
+    position:relative;
+    height:470px;
+    max-width:850px;
+    margin:auto;
+    border-radius:20px;
+    overflow:hidden;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #146a3c 0,
+            #146a3c 70px,
+            #176f41 70px,
+            #176f41 140px
+        );
+    border:3px solid rgba(255,255,255,.7);
+}
+
+.line{
+    position:absolute;
+    inset:10%;
+    border:2px solid rgba(255,255,255,.6);
+}
+
+.circle{
+    position:absolute;
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    background:#1686ff;
+    border:3px solid white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:10px;
+    font-weight:bold;
+}
+
+/* ================= MATCH ================= */
+
+#match{
+    position:fixed;
+    inset:0;
+    display:none;
+    z-index:80;
+    background:#07130d;
+}
+
+.matchTop{
+    height:55px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 15px;
+    background:#071a11;
+}
+
+.score{
+    font-size:22px;
+    font-weight:900;
+}
+
+.matchField{
+    position:absolute;
+    top:55px;
+    bottom:0;
+    left:0;
+    right:0;
+    overflow:hidden;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #11743e 0,
+            #11743e 90px,
+            #148247 90px,
+            #148247 180px
+        );
+}
+
+.fieldLines{
+    position:absolute;
+    inset:8%;
+    border:3px solid rgba(255,255,255,.8);
+}
+
+.midLine{
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:50%;
+    border-left:3px solid white;
+}
+
+.centerCircle{
+    position:absolute;
+    width:140px;
+    height:140px;
+    border:3px solid white;
+    border-radius:50%;
+    left:calc(50% - 70px);
+    top:calc(50% - 70px);
+}
+
+.ball{
+    position:absolute;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background:white;
+    box-shadow:0 0 10px white;
+    left:50%;
+    top:50%;
+    z-index:10;
+}
+
+.mplayer{
+    position:absolute;
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:9px;
+    font-weight:bold;
+    border:2px solid white;
+    z-index:5;
+}
+
+.me{
+    background:#1686ff;
+}
+
+.enemy{
+    background:#e94c4c;
+}
+
+.controls{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+}
+
+.joystick{
+    position:absolute;
+    bottom:25px;
+    left:25px;
+    width:115px;
+    height:115px;
+    border-radius:50%;
+    background:rgba(255,255,255,.12);
+    border:2px solid rgba(255,255,255,.3);
+    pointer-events:auto;
+}
+
+.stick{
+    position:absolute;
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:rgba(255,255,255,.5);
+    left:32px;
+    top:32px;
+}
+
+.actions{
+    position:absolute;
+    right:20px;
+    bottom:20px;
+    display:grid;
+    grid-template-columns:repeat(2,70px);
+    gap:9px;
+    pointer-events:auto;
+}
+
+.action{
+    width:70px;
+    height:55px;
+    border-radius:50%;
+    background:rgba(15,25,40,.8);
+    border:2px solid rgba(255,255,255,.3);
+    font-size:11px;
+}
+
+.action.shoot{
+    background:#c63c3c;
+}
+
+.action.pass{
+    background:#147dd8;
+}
+
+#celebration{
+    position:absolute;
+    inset:0;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    background:rgba(0,0,0,.5);
+    z-index:30;
+}
+
+.goalText{
+    font-size:55px;
+    font-weight:900;
+    animation:goalPop .5s infinite alternate;
+}
+
+@keyframes goalPop{
+    from{transform:scale(1)}
+    to{transform:scale(1.15)}
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:700px){
+
+    .top{
+        height:50px;
+    }
+
+    .layout{
+        height:calc(100vh - 50px);
+    }
+
+    .side{
+        width:76px;
+    }
+
+    .side button{
+        font-size:9px;
+        padding:9px 2px;
+    }
+
+    .content{
+        padding:8px;
+    }
+
+    .hero{
+        min-height:calc(100vh - 70px);
+    }
+
+    .pitch{
+        height:400px;
+    }
+
+    .circle{
+        width:45px;
+        height:45px;
+    }
+}
+
+/* ================= NOTIFY ================= */
+
+#notify{
+    position:fixed;
+    top:70px;
+    left:50%;
+    transform:translateX(-50%);
+    padding:12px 20px;
+    border-radius:12px;
+    background:#111c2a;
+    border:1px solid #3d526b;
+    display:none;
+    z-index:200;
+}
+
+/* ================= PACK ================= */
+
+.packArea{
+    text-align:center;
+    padding:30px;
+}
+
+.pack{
+    width:210px;
+    height:300px;
+    margin:20px auto;
+    border-radius:18px;
+    background:linear-gradient(145deg,#194f92,#0d172a);
+    border:3px solid #67cfff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:35px;
+    font-weight:900;
+    transition:.7s;
+}
+
+.pack.open{
+    transform:rotateY(180deg) scale(1.08);
+}
+
+/* ================= TABLE ================= */
+
+.table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.table td,.table th{
+    padding:9px;
+    border-bottom:1px solid #26384d;
+    text-align:left;
+}
+
+input,select{
+    background:#0d1a29;
+    color:white;
+    border:1px solid #33485f;
+    padding:11px;
+    border-radius:9px;
+    margin:4px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+
+    <div class="loginBox">
+
+        <div class="logo">COIKEMFC</div>
+        <div class="sub">Football Game</div>
+
+        <button class="loginBtn google" onclick="login('Google')">
+            🔵 ĐĂNG NHẬP GOOGLE
+        </button>
+
+        <button class="loginBtn apple" onclick="login('Apple')">
+             ĐĂNG NHẬP APPLE
+        </button>
+
+        <button class="loginBtn guest" onclick="login('Khách')">
+            ⚽ CHƠI KHÁCH
+        </button>
+
+        <div class="note">
+            Bản thử nghiệm — dữ liệu được lưu trên thiết bị
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- GAME -->
+<div id="game">
+
+    <div class="top">
+
+        <b>⚽ COIKEMFC</b>
+
+        <div class="money">
+            <span>🪙 <b id="coins">100000</b></span>
+            <span>💎 <b id="gems">100</b></span>
+        </div>
+
+        <b id="username">Player</b>
+
+    </div>
+
+
+    <div class="layout">
+
+        <aside class="side">
+
+            <button onclick="page('home')">🏠 SẢNH</button>
+            <button onclick="page('squad')">👥 ĐỘI HÌNH</button>
+            <button onclick="startMatch()">⚽ TRẬN</button>
+            <button onclick="page('market')">💰 TTCN</button>
+            <button onclick="page('pack')">🎴 MỞ THẺ</button>
+            <button onclick="page('inventory')">🎒 KHO</button>
+            <button onclick="page('upgrade')">⬆️ NÂNG CẤP</button>
+            <button onclick="page('color')">🎨 TEAM COLOR</button>
+            <button onclick="page('events')">🎟️ SỰ KIỆN</button>
+            <button onclick="page('missions')">📋 NHIỆM VỤ</button>
+            <button onclick="page('rank')">🏆 RANK</button>
+            <button onclick="page('profile')">👤 HỒ SƠ</button>
+            <button onclick="page('settings')">⚙️ CÀI ĐẶT</button>
+            <button onclick="page('test')">🧪 TEST CẦU THỦ</button>
+
+        </aside>
+
+
+        <main class="content">
+
+            <!-- HOME -->
+            <section id="home" class="page active">
+
+                <div class="hero">
+
+                    <div class="stadiumLight"></div>
+
+                    <div class="player">
+
+                        <div class="head">
+                            <div class="hair"></div>
+                        </div>
+
+                        <div class="bodyPlayer"></div>
+
+                        <div class="leg left"></div>
+                        <div class="leg right"></div>
+
+                        <div class="boot l"></div>
+                        <div class="boot r"></div>
+
+                    </div>
+
+                    <div class="captainName">
+                        ⭐ CAPTAIN: <b id="captainName">Alex</b>
+                    </div>
+
+                </div>
+
+                <button class="bigBtn"
+                        onclick="startMatch()">
+                    ⚽ BẮT ĐẦU TRẬN
+                </button>
+
+            </section>
+
+
+            <!-- SQUAD -->
+            <section id="squad" class="page">
+
+                <h2>👥 ĐỘI HÌNH</h2>
+
+                <select id="formation"
+                        onchange="changeFormation()">
+
+                    <option>4-3-3</option>
+                    <option>4-2-3-1</option>
+                    <option>4-1-2-3</option>
+                    <option>3-4-3</option>
+
+                </select>
+
+                <button class="bigBtn"
+                        onclick="notify('Đã đổi đội hình')">
+                    XÁC NHẬN
+                </button>
+
+                <div class="pitch">
+
+                    <div class="line"></div>
+
+                    <div class="circle" style="left:47%;bottom:5%">GK</div>
+
+                    <div class="circle" style="left:15%;bottom:25%">LB</div>
+                    <div class="circle" style="left:38%;bottom:25%">CB</div>
+                    <div class="circle" style="left:58%;bottom:25%">CB</div>
+                    <div class="circle" style="left:81%;bottom:25%">RB</div>
+
+                    <div class="circle" style="left:30%;top:45%">CM</div>
+                    <div class="circle" style="left:47%;top:40%">CAM</div>
+                    <div class="circle" style="left:64%;top:45%">CM</div>
+
+                    <div class="circle" style="left:15%;top:20%">LW</div>
+                    <div class="circle" style="left:47%;top:12%">ST</div>
+                    <div class="circle" style="left:79%;top:20%">RW</div>
+
+                </div>
+
+                <button class="bigBtn"
+                        onclick="notify('Alex đã được chọn làm đội trưởng')">
+                    ⭐ ĐẶT CAPTAIN
+                </button>
+
+                <button class="bigBtn"
+                        onclick="notify('Đã đặt người sút phạt')">
+                    🎯 ĐẶT SÚT PHẠT
+                </button>
+
+                <button class="bigBtn"
+                        onclick="notify('Đã đặt người đá penalty')">
+                    ⚡ ĐẶT PENALTY
+                </button>
+
+                <button class="bigBtn"
+                        onclick="notify('Đã đặt người đá corner')">
+                    🚩 ĐẶT CORNER
+                </button>
+
+            </section>
+
+
+            <!-- MARKET -->
+            <section id="market" class="page">
+
+                <h2>💰 THỊ TRƯỜNG CHUYỂN NHƯỢNG</h2>
+
+                <input id="search"
+                       placeholder="Tìm cầu thủ..."
+                       oninput="renderMarket()">
+
+                <select id="seasonFilter"
+                        onchange="renderMarket()">
+                    <option value="">Tất cả mùa</option>
+                    <option>BASE</option>
+                    <option>RISING</option>
+                    <option>HERO</option>
+                    <option>ICON</option>
+                    <option>PRIME</option>
+                    <option>SPECIAL</option>
+                    <option>WORLD STAR</option>
+                    <option>CHAMPIONS</option>
+                    <option>EVENT</option>
+                </select>
+
+                <div id="marketList" class="cards"></div>
+
+            </section>
+
+
+            <!-- PACK -->
+            <section id="pack" class="page">
+
+                <h2>🎴 MỞ THẺ CẦU THỦ</h2>
+
+                <div class="packArea">
+
+                    <div id="packCard" class="pack">
+                        ?
+                    </div>
+
+                    <button class="bigBtn"
+                            onclick="openPack()">
+                        🎴 MỞ THẺ
+                    </button>
+
+                    <button class="bigBtn"
+                            onclick="skipPack()">
+                        ⏩ BỎ QUA HIỆU ỨNG
+                    </button>
+
+                    <div id="packResult"></div>
+
+                </div>
+
+            </section>
+
+
+            <!-- INVENTORY -->
+            <section id="inventory" class="page">
+
+                <h2>🎒 KHO CẦU THỦ</h2>
+
+                <div id="inventoryList" class="cards"></div>
+
+            </section>
+
+
+            <!-- UPGRADE -->
+            <section id="upgrade" class="page">
+
+                <h2>⬆️ NÂNG CẤP THẺ</h2>
+
+                <p>Chọn cầu thủ trong kho:</p>
+
+                <select id="upgradePlayer"></select>
+
+                <button class="bigBtn"
+                        onclick="upgrade()">
+                    ⬆️ NÂNG CẤP
+                </button>
+
+                <div id="upgradeResult"></div>
+
+            </section>
+
+
+            <!-- COLOR -->
+            <section id="color" class="page">
+
+                <h2>🎨 TEAM COLOR</h2>
+
+                <div class="cards">
+
+                    <div class="card">
+                        <h3>🇫🇷 FRANCE</h3>
+                        <p>+2 PAC</p>
+                        <p>+2 SHO</p>
+                        <button class="bigBtn"
+                                onclick="notify('Team Color France kích hoạt')">
+                            KÍCH HOẠT
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <h3>🇪🇸 SPAIN</h3>
+                        <p>+2 PAS</p>
+                        <p>+2 DRI</p>
+                        <button class="bigBtn"
+                                onclick="notify('Team Color Spain kích hoạt')">
+                            KÍCH HOẠT
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <h3>🌍 WORLD STAR</h3>
+                        <p>+1 toàn bộ chỉ số</p>
+                        <button class="bigBtn"
+                                onclick="notify('Team Color World Star kích hoạt')">
+                            KÍCH HOẠT
+                        </button>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- EVENTS -->
+            <section id="events" class="page">
+
+                <h2>🎟️ SỰ KIỆN</h2>
+
+                <div class="cards">
+
+                    <div class="card">
+                        <h3>🎁 Đăng nhập hôm nay</h3>
+                        <p>Nhận 10.000 coin</p>
+                        <button class="bigBtn"
+                                onclick="reward(10000)">
+                            NHẬN
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <h3>⚽ Thắng 3 trận</h3>
+                        <p>Nhận 50 gems</p>
+                        <button class="bigBtn"
+                                onclick="rewardGems(50)">
+                            NHẬN
+                        </button>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- MISSIONS -->
+            <section id="missions" class="page">
+
+                <h2>📋 NHIỆM VỤ</h2>
+
+                <div class="cards">
+
+                    <div class="card">
+                        <h3>Chơi 1 trận</h3>
+                        <p>0 / 1</p>
+                        <button class="bigBtn"
+                                onclick="notify('Hoàn thành nhiệm vụ sau khi đá trận')">
+                            XEM
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <h3>Mở 1 thẻ</h3>
+                        <p id="packMission">0 / 1</p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- RANK -->
+            <section id="rank" class="page">
+
+  <!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1,
+maximum-scale=1,
+user-scalable=no">
+
+<title>COIKEMFC</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#06101a;
+}
+
+body{
+    font-family:Arial,sans-serif;
+}
+
+#game{
+    position:fixed;
+    inset:0;
+    background:#07131c;
+}
+
+canvas{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+}
+
+/* ================= NÚT ================= */
+
+.ui{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+}
+
+.top{
+    position:absolute;
+    top:12px;
+    left:15px;
+    right:15px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    color:white;
+    font-weight:bold;
+    font-size:18px;
+
+    text-shadow:0 2px 5px #000;
+}
+
+.score{
+    background:rgba(0,0,0,.55);
+    padding:8px 18px;
+    border-radius:12px;
+}
+
+.buttons{
+    position:absolute;
+    right:20px;
+    bottom:20px;
+
+    display:grid;
+    grid-template-columns:75px 75px;
+    gap:10px;
+
+    pointer-events:auto;
+}
+
+.btn{
+    width:75px;
+    height:60px;
+
+    border-radius:50%;
+
+    border:2px solid rgba(255,255,255,.45);
+
+    background:rgba(5,15,25,.72);
+
+    color:white;
+    font-weight:bold;
+
+    box-shadow:
+    0 5px 20px rgba(0,0,0,.4);
+}
+
+.shoot{
+    background:rgba(190,35,35,.85);
+}
+
+.pass{
+    background:rgba(20,100,210,.85);
+}
+
+/* ================= JOYSTICK ================= */
+
+.joystick{
+    position:absolute;
+
+    left:25px;
+    bottom:25px;
+
+    width:125px;
+    height:125px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.10);
+
+    border:
+    2px solid rgba(255,255,255,.25);
+
+    pointer-events:auto;
+}
+
+.stick{
+    position:absolute;
+
+    left:37px;
+    top:37px;
+
+    width:50px;
+    height:50px;
+
+    border-radius:50%;
+
+    background:
+    radial-gradient(circle at 35% 30%,
+    #fff,
+    #8995a0);
+
+    box-shadow:
+    0 4px 15px #0008;
+}
+
+/* ================= MÀN HÌNH KHÓA XOAY ================= */
+
+.rotate{
+    display:none;
+
+    position:fixed;
+    inset:0;
+
+    background:#06101a;
+
+    color:white;
+
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    z-index:99;
+
+    font-size:22px;
+    font-weight:bold;
+}
+
+@media (orientation:portrait){
+    .rotate{
+        display:flex;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+<canvas id="canvas"></canvas>
+
+<div class="ui">
+
+    <div class="top">
+
+        <div>⚽ COIKEMFC</div>
+
+        <div class="score">
+            COI 0 - 0 AI
+        </div>
+
+        <div id="time">
+            00:00
+        </div>
+
+    </div>
+
+    <div class="joystick" id="joystick">
+        <div class="stick" id="stick"></div>
+    </div>
+
+    <div class="buttons">
+
+        <button class="btn pass"
+        onclick="passBall()">
+            W<br>CHUYỀN
+        </button>
+
+        <button class="btn"
+        onclick="crossBall()">
+            A<br>TẠT
+        </button>
+
+        <button class="btn shoot"
+        onclick="shootBall()">
+            D<br>SÚT
+        </button>
+
+        <button class="btn"
+        onclick="lowShot()">
+            DD<br>SỆT
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<div class="rotate">
+    📱<br><br>
+    Xoay điện thoại ngang<br>
+    để chơi COIKEMFC
+</div>
+
+
+<script>
+
+const canvas =
+document.getElementById("canvas");
+
+const ctx =
+canvas.getContext("2d");
+
+let W,H;
+
+function resize(){
+
+    W=canvas.width=innerWidth*devicePixelRatio;
+    H=canvas.height=innerHeight*devicePixelRatio;
+
+    canvas.style.width=innerWidth+"px";
+    canvas.style.height=innerHeight+"px";
+
+    ctx.setTransform(
+        devicePixelRatio,
+        0,
+        0,
+        devicePixelRatio,
+        0,
+        0
+    );
+
+    W=innerWidth;
+    H=innerHeight;
+}
+
+addEventListener("resize",resize);
+
+resize();
+
+
+/* =================================================
+   CẦU THỦ
+================================================= */
+
+const player={
+
+    x:innerWidth/2,
+    y:innerHeight*.64,
+
+    vx:0,
+    vy:0,
+
+    angle:0,
+
+    run:0
+
+};
+
+
+/* =================================================
+   BÓNG
+================================================= */
+
+const ball={
+
+    x:player.x+45,
+    y:player.y+45,
+
+    vx:0,
+    vy:0,
+
+    spin:0
+
+};
+
+
+/* =================================================
+   VẼ KHÁN ĐÀI
+================================================= */
+
+function drawStadium(){
+
+    /* bầu trời */
+
+    let sky=
+    ctx.createLinearGradient(
+        0,0,0,H*.48
+    );
+
+    sky.addColorStop(0,"#101d31");
+    sky.addColorStop(.55,"#354b63");
+    sky.addColorStop(1,"#7d8b8c");
+
+    ctx.fillStyle=sky;
+
+    ctx.fillRect(
+        0,0,W,H*.52
+    );
+
+
+    /* đèn sân */
+
+    for(let i=0;i<5;i++){
+
+        let x=
+        W*.08+i*W*.21;
+
+        let glow=
+        ctx.createRadialGradient(
+            x,
+            H*.17,
+            0,
+            x,
+            H*.17,
+            100
+        );
+
+        glow.addColorStop(
+            0,
+            "rgba(255,255,220,.9)"
+        );
+
+        glow.addColorStop(
+            1,
+            "rgba(255,255,220,0)"
+        );
+
+        ctx.fillStyle=glow;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,
+            H*.17,
+            100,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+    }
+
+
+    /* khán đài */
+
+    ctx.fillStyle="#202a35";
+
+    ctx.fillRect(
+        0,
+        H*.28,
+        W,
+        H*.20
+    );
+
+
+    /* hàng ghế */
+
+    const rows=8;
+
+    for(let r=0;r<rows;r++){
+
+        for(let i=0;i<100;i++){
+
+            let x=
+            (i/100)*W+
+            Math.sin(i*5+r)*3;
+
+            let y=
+            H*.29+
+            r*H*.022;
+
+            let size=
+            2+Math.random()*3;
+
+            ctx.fillStyle=
+            ["#d9d9d9",
+             "#4e79a7",
+             "#c94c4c",
+             "#f0c34b"][i%4];
+
+            ctx.fillRect(
+                x,
+                y,
+                size,
+                size
+            );
+        }
+    }
+
+
+    /* bảng quảng cáo */
+
+    ctx.fillStyle="#10202b";
+
+    ctx.fillRect(
+        0,
+        H*.46,
+        W,
+        H*.035
+    );
+
+
+    ctx.fillStyle="#35d1ff";
+
+    ctx.font="bold 15px Arial";
+
+    ctx.textAlign="center";
+
+    ctx.fillText(
+        "COIKEMFC",
+        W/2,
+        H*.485
+    );
+
+}
+
+
+/* =================================================
+   SÂN
+================================================= */
+
+function drawPitch(){
+
+    let top=H*.49;
+
+    let gradient=
+    ctx.createLinearGradient(
+        0,top,0,H
+    );
+
+    gradient.addColorStop(
+        0,
+        "#25884c"
+    );
+
+    gradient.addColorStop(
+        1,
+        "#07552d"
+    );
+
+    ctx.fillStyle=gradient;
+
+    ctx.fillRect(
+        0,
+        top,
+        W,
+        H-top
+    );
+
+
+    /* sọc cỏ */
+
+    for(let i=0;i<12;i++){
+
+        ctx.fillStyle=
+        i%2===0
+        ?"rgba(255,255,255,.035)"
+        :"rgba(0,0,0,.035)";
+
+        ctx.fillRect(
+            i*W/12,
+            top,
+            W/12,
+            H-top
+        );
+
+    }
+
+
+    /* đường sân */
+
+    ctx.strokeStyle=
+    "rgba(255,255,255,.75)";
+
+    ctx.lineWidth=2;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        W*.04,
+        H*.51
+    );
+
+    ctx.lineTo(
+        W*.96,
+        H*.51
+    );
+
+    ctx.stroke();
+
+
+    /* vòng tròn giữa */
+
+    ctx.beginPath();
+
+    ctx.arc(
+        W/2,
+        H*.65,
+        65,
+        0,
+        Math.PI*2
+    );
+
+    ctx.stroke();
+
+
+    /* đường dọc */
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        W/2,
+        H*.49
+    );
+
+    ctx.lineTo(
+        W/2,
+        H
+    );
+
+    ctx.stroke();
+
+
+    /* vùng cấm */
+
+    ctx.strokeRect(
+        W*.36,
+        H*.49,
+        W*.28,
+        H*.20
+    );
+
+
+    /* khung thành xa */
+
+    ctx.strokeRect(
+        W*.43,
+        H*.49,
+        W*.14,
+        H*.07
+    );
+
+}
+
+
+/* =================================================
+   VẼ CẦU THỦ TOÀN THÂN
+================================================= */
+
+function drawPlayer(){
+
+    ctx.save();
+
+    ctx.translate(
+        player.x,
+        player.y
+    );
+
+    let run=
+    Math.sin(player.run)*7;
+
+    /* bóng cầu thủ */
+
+    ctx.fillStyle=
+    "rgba(0,0,0,.35)";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,
+        62,
+        35,
+        9,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /* chân sau */
+
+    ctx.save();
+
+    ctx.rotate(
+        -0.10+
+        run*.012
+    );
+
+    drawLeg(
+        -13,
+        15
+    );
+
+    ctx.restore();
+
+
+    /* chân trước */
+
+    ctx.save();
+
+    ctx.rotate(
+        0.12-
+        run*.012
+    );
+
+    drawLeg(
+        13,
+        15
+    );
+
+    ctx.restore();
+
+
+    /* thân */
+
+    let shirt=
+    ctx.createLinearGradient(
+        -25,
+        -60,
+        25,
+        20
+    );
+
+    shirt.addColorStop(
+        0,
+        "#1c86ff"
+    );
+
+    shirt.addColorStop(
+        1,
+        "#063b91"
+    );
+
+    ctx.fillStyle=shirt;
+
+    ctx.beginPath();
+
+    ctx.roundRect(
+        -25,
+        -58,
+        50,
+        75,
+        12
+    );
+
+    ctx.fill();
+
+
+    /* số áo */
+
+    ctx.fillStyle="white";
+
+    ctx.font="bold 27px Arial";
+
+    ctx.textAlign="center";
+
+    ctx.fillText(
+        "10",
+        0,
+        -12
+    );
+
+
+    /* tay trái */
+
+    ctx.save();
+
+    ctx.translate(
+        -24,
+        -42
+    );
+
+    ctx.rotate(
+        -.45+run*.01
+    );
+
+    drawArm();
+
+    ctx.restore();
+
+
+    /* tay phải */
+
+    ctx.save();
+
+    ctx.translate(
+        24,
+        -42
+    );
+
+    ctx.rotate(
+        .55-run*.01
+    );
+
+    drawArm();
+
+    ctx.restore();
+
+
+    /* cổ */
+
+    ctx.fillStyle="#b96f4c";
+
+    ctx.fillRect(
+        -8,
+        -67,
+        16,
+        13
+    );
+
+
+    /* đầu */
+
+    ctx.fillStyle="#c9845e";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        -80,
+        25,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /* tai */
+
+    ctx.beginPath();
+
+    ctx.arc(
+        -24,
+        -80,
+        6,
+        0,
+        Math.PI*2
+    );
+
+    ctx.arc(
+        24,
+        -80,
+        6,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /* tóc */
+
+    ctx.fillStyle="#151515";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        -87,
+        26,
+        Math.PI,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /* tóc trước */
+
+    ctx.beginPath();
+
+    ctx.moveTo(-22,-88);
+
+    ctx.quadraticCurveTo(
+        -5,-108,
+        19,-92
+    );
+
+    ctx.lineTo(
+        10,-82
+    );
+
+    ctx.lineTo(
+        -3,-94
+    );
+
+    ctx.lineTo(
+        -15,-84
+    );
+
+    ctx.fill();
+
+
+    /* mắt */
+
+    ctx.fillStyle="#111";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        -9,
+        -81,
+        2.5,
+        0,
+        Math.PI*2
+    );
+
+    ctx.arc(
+        9,
+        -81,
+        2.5,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /* cổ áo */
+
+    ctx.strokeStyle=
+    "rgba(255,255,255,.7)";
+
+    ctx.lineWidth=2;
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        -58,
+        12,
+        0,
+        Math.PI
+    );
+
+    ctx.stroke();
+
+
+    ctx.restore();
+
+}
+
+
+/* =================================================
+   CHÂN
+================================================= */
+
+function drawLeg(x,y){
+
+    /* đùi */
+
+    ctx.fillStyle="#18294b";
+
+    ctx.beginPath();
+
+    ctx.roundRect(
+        x-8,
+        y,
+        16,
+        35,
+        7
+    );
+
+    ctx.fill();
+
+
+    /* ống chân */
+
+    ctx.fillStyle="#10203d";
+
+    ctx.beginPath();
+
+    ctx.roundRect(
+        x-7,
+        y+28,
+        14,
+        28,
+        6
+    );
+
+    ctx.fill();
+
+
+    /* giày */
+
+    ctx.fillStyle="#111";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        x+5,
+        y+59,
+        18,
+        8,
+        -.1,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /* đế giày */
+
+    ctx.strokeStyle="#eee";
+
+    ctx.lineWidth=2;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        x-10,
+        y+64
+    );
+
+    ctx.lineTo(
+        x+19,
+        y+64
+    );
+
+    ctx.stroke();
+
+}
+
+
+/* =================================================
+   TAY
+================================================= */
+
+function drawArm(){
+
+    ctx.fillStyle="#1680ef";
+
+    ctx.beginPath();
+
+    ctx.roundRect(
+        -7,
+        0,
+        14,
+        45,
+        7
+    );
+
+    ctx.fill();
+
+
+    ctx.fillStyle="#c9845e";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        49,
+        8,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+}
+
+
+/* =================================================
+   BÓNG
+================================================= */
+
+function drawBall(){
+
+    ctx.save();
+
+    ctx.translate(
+        ball.x,
+        ball.y
+    );
+
+    let s=
+    1+
+    Math.sin(ball.spin)*.05;
+
+    ctx.scale(s,s);
+
+
+    /* bóng */
+
+    let g=
+    ctx.createRadialGradient(
+        -4,
+        -5,
+        1,
+        0,
+        0,
+        14
+    );
+
+    g.addColorStop(
+        0,
+        "#ffffff"
+    );
+
+    g.addColorStop(
+        1,
+        "#9ba8ae"
+    );
+
+    ctx.fillStyle=g;
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        0,
+        14,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /* họa tiết */
+
+    ctx.fillStyle="#253b4a";
+
+    for(let i=0;i<5;i++){
+
+        let a=
+        ball.spin+
+        i*Math.PI*2/5;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            Math.cos(a)*6,
+            Math.sin(a)*6,
+            3,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+    }
+
+    ctx.restore();
+
+}
+
+
+/* =================================================
+   AI CẦU THỦ
+================================================= */
+
+const enemies=[];
+
+for(let i=0;i<5;i++){
+
+    enemies.push({
+
+        x:W*.25+
+        Math.random()*W*.5,
+
+        y:H*.55+
+        Math.random()*H*.25,
+
+        run:Math.random()*10
+
+    });
+
+}
+
+
+function drawEnemies(){
+
+    enemies.forEach((p,i)=>{
+
+        p.x+=
+        Math.sin(Date.now()*.001+i)
+        *.3;
+
+        p.run+=.08;
+
+        ctx.save();
+
+        ctx.translate(
+            p.x,
+            p.y
+        );
+
+        let r=
+        Math.sin(p.run)*4;
+
+        /* bóng */
+
+        ctx.fillStyle=
+        "rgba(0,0,0,.3)";
+
+        ctx.beginPath();
+
+        ctx.ellipse(
+            0,
+            53,
+            25,
+            7,
+            0,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        /* chân */
+
+        ctx.fillStyle="#401b30";
+
+        ctx.fillRect(
+            -12,
+            10,
+            10,
+            42+r
+        );
+
+        ctx.fillRect(
+            3,
+            10,
+            10,
+            42-r
+        );
+
+
+        /* áo */
+
+        ctx.fillStyle="#e43f4f";
+
+        ctx.beginPath();
+
+        ctx.roundRect(
+            -22,
+            -45,
+            44,
+            65,
+            10
+        );
+
+        ctx.fill();
+
+
+        /* đầu */
+
+        ctx.fillStyle="#c9845e";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            0,
+            -65,
+            21,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        /* tóc */
+
+        ctx.fillStyle="#171717";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            0,
+            -73,
+            22,
+            Math.PI,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.restore();
+
+    });
+
+}
+
+
+/* =================================================
+   HIỆU ỨNG CHUYỂN ĐỘNG
+================================================= */
+
+function update(){
+
+    player.x+=player.vx;
+    player.y+=player.vy;
+
+    player.vx*=.86;
+    player.vy*=.86;
+
+    player.x=
+    Math.max(
+        40,
+        Math.min(W-40,player.x)
+    );
+
+    player.y=
+    Math.max(
+        H*.53,
+        Math.min(H-90,player.y)
+    );
+
+
+    /* bóng bám cầu thủ */
+
+    if(
+        Math.hypot(
+            ball.x-player.x,
+            ball.y-player.y
+        )<70
+    ){
+
+        ball.x+=
+        (player.x+45-ball.x)*.08;
+
+        ball.y+=
+        (player.y+48-ball.y)*.08;
+
+    }
+
+
+    player.run+=.13;
+
+    ball.spin+=.15;
+
+}
+
+
+/* =================================================
+   VẼ
+================================================= */
+
+function draw(){
+
+    ctx.clearRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+    drawStadium();
+
+    drawPitch();
+
+    drawEnemies();
+
+    drawPlayer();
+
+    drawBall();
+
+    update();
+
+    requestAnimationFrame(draw);
+
+}
+
+draw();
+
+
+/* =================================================
+   NÚT TRẬN ĐẤU
+================================================= */
+
+function passBall(){
+
+    ball.vx=
+    (Math.random()-.5)*12;
+
+    ball.vy=
+    -8;
+
+    notify("CHUYỀN BÓNG");
+
+}
+
+
+function crossBall(){
+
+    ball.vx=
+    (Math.random()>.5?1:-1)*15;
+
+    ball.vy=-12;
+
+    notify("TẠT BÓNG");
+
+}
+
+
+function shootBall(){
+
+    ball.vx=
+    (Math.random()-.5)*5;
+
+    ball.vy=-22;
+
+    notify("💥 SÚT!");
+
+}
+
+
+function lowShot(){
+
+    ball.vx=
+    (Math.random()-.5)*4;
+
+    ball.vy=-12;
+
+    notify("⚡ SÚT SỆT!");
+
+}
+
+
+/* =================================================
+   THÔNG BÁO
+================================================= */
+
+function notify(text){
+
+    const old=
+    document.getElementById("msg");
+
+    if(old)old.remove();
+
+    const el=
+    document.createElement("div");
+
+    el.id="msg";
+
+    el.textContent=text;
+
+    el.style.position="fixed";
+    el.style.left="50%";
+    el.style.top="80px";
+    el.style.transform="translateX(-50%)";
+
+    el.style.padding="12px 22px";
+
+    el.style.background=
+    "rgba(0,0,0,.7)";
+
+    el.style.color="white";
+
+    el.style.borderRadius="12px";
+
+    el.style.fontWeight="bold";
+
+    el.style.zIndex="100";
+
+    document.body.appendChild(el);
+
+    setTimeout(()=>{
+        el.remove();
+    },1000);
+
+}
+
+
+/* =================================================
+   JOYSTICK
+================================================= */
+
+const joy=
+document.getElementById("joystick");
+
+const stick=
+document.getElementById("stick");
+
+let dragging=false;
+
+joy.addEventListener(
+"pointerdown",
+()=>{
+    dragging=true;
+});
+
+
+joy.addEventListener(
+"pointerup",
+()=>{
+    dragging=false;
+
+    stick.style.transform=
+    "translate(0,0)";
+});
+
+
+joy.addEventListener(
+"pointermove",
+e=>{
+
+    if(!dragging)return;
+
+    const r=
+    joy.getBoundingClientRect();
+
+    let x=
+    e.clientX-r.left-62.5;
+
+    let y=
+    e.clientY-r.top-62.5;
+
+    const max=38;
+
+    const d=
+    Math.sqrt(x*x+y*y);
+
+    if(d>max){
+
+        x=x/d*max;
+        y=y/d*max;
+
+    }
+
+    stick.style.transform=
+    `translate(${x}px,${y}px)`;
+
+    player.vx=x*.08;
+    player.vy=y*.08;
+
+});
+
+
+/* =================================================
+   BÀN PHÍM PC
+================================================= */
+
+document.addEventListener(
+"keydown",
+e=>{
+
+    if(e.code==="ArrowLeft")
+        player.vx=-3;
+
+    if(e.code==="ArrowRight")
+        player.vx=3;
+
+    if(e.code==="ArrowUp")
+        player.vy=-3;
+
+    if(e.code==="ArrowDown")
+        player.vy=3;
+
+    if(e.code==="KeyW")
+        passBall();
+
+    if(e.code==="KeyA")
+        crossBall();
+
+    if(e.code==="KeyD")
+        shootBall();
+
+});
+
+
+/* =================================================
+   ĐỒNG HỒ
+================================================= */
+
+let seconds=0;
+
+setInterval(()=>{
+
+    seconds++;
+
+    let m=
+    String(Math.floor(seconds/60))
+    .padStart(2,"0");
+
+    let s=
+    String(seconds%60)
+    .padStart(2,"0");
+
+    document.getElementById("time")
+    .textContent=m+":"+s;
+
+},1000);
+
+</script>
+
+</body>
+  </html><script>
+const playerImages = {};
+
+function loadPlayer(name, file) {
+    const img = new Image();
+    img.src = "players/" + file;
+    playerImages[name] = img;
+}
+
+loadPlayer("Messi", "messi.png");
+loadPlayer("Ronaldo", "ronaldo.png");
+loadPlayer("Mbappe", "mbappe.png");
+loadPlayer("Haaland", "haaland.png");
+
+
+function drawPlayerImage(name, x, y, scale = 1) {
+
+    const img = playerImages[name];
+
+    if (!img || !img.complete) return;
+
+    const width = 100 * scale;
+    const height = 140 * scale;
+
+    ctx.drawImage(
+        img,
+        x - width / 2,
+        y - height + 20,
+        width,
+        height
+    );
+}
+  </script>
